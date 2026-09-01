@@ -1,1 +1,1 @@
-# telegram-earning-app
+Telegram Earning Bot
