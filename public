@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+  <title>Earning Mini App</title>
+  <script src="https://telegram.org/js/telegram-web-app.js?63"></script>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="app">
+    <header class="top">
+      <div>
+        <div class="muted">Welcome</div>
+        <h2 id="name">Loading...</h2>
+      </div>
+      <div class="avatar" id="avatar">U</div>
+    </header>
+
+    <section class="balance card">
+      <div class="muted">Available Balance</div>
+      <div class="money">৳ <span id="balance">0.00</span></div>
+      <div class="stats">
+        <span>👥 Referrals: <b id="referrals">0</b></span>
+        <span>🎯 Tasks: <b id="taskCount">0</b></span>
+      </div>
+    </section>
+
+    <section>
+      <h3>Earn</h3>
+      <div id="tasks" class="tasks"></div>
+    </section>
+
+    <section class="card referral">
+      <h3>Invite & Earn</h3>
+      <p class="muted">Invite friends and receive your referral reward.</p>
+      <input id="refLink" readonly>
+      <button onclick="copyRef()">Copy Referral Link</button>
+    </section>
+
+    <section class="card">
+      <h3>Withdraw</h3>
+      <div class="row">
+        <input id="amount" type="number" min="1" placeholder="Amount">
+        <input id="method" placeholder="Method e.g. bKash">
+      </div>
+      <input id="account" placeholder="Account / number">
+      <button onclick="withdraw()">Request Withdrawal</button>
+      <p id="message" class="muted"></p>
+    </section>
+
+    <nav class="bottom">
+      <button onclick="scrollTo(0,0)">🏠<small>Home</small></button>
+      <button onclick="document.getElementById('tasks').scrollIntoView()">💰<small>Earn</small></button>
+      <button onclick="document.querySelector('.referral').scrollIntoView()">👥<small>Refer</small></button>
+      <button onclick="document.querySelector('#amount').scrollIntoView()">💳<small>Withdraw</small></button>
+    </nav>
+  </div>
+<script src="/app.js"></script>
+</body>
+</html>
