@@ -1,0 +1,14 @@
+{
+  "name": "telegram-earning-miniapp",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "better-sqlite3": "^11.10.0",
+    "dotenv": "^16.6.1",
+    "express": "^5.1.0",
+    "telegraf": "^4.16.3"
+  }
+}

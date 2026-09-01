@@ -1,0 +1,44 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Admin Panel</title><link rel="stylesheet" href="/style.css"></head>
+<body><div class="app">
+<h2>🛠️ Admin Panel</h2>
+<input id="pass" type="password" placeholder="Admin password">
+<button onclick="login()">Login</button>
+<div id="panel" style="display:none">
+  <div class="card"><h3>Statistics</h3><p id="stats"></p></div>
+  <div class="card"><h3>Add Task</h3>
+    <input id="title" placeholder="Task title">
+    <input id="reward" type="number" placeholder="Reward">
+    <input id="url" placeholder="Task URL">
+    <button onclick="addTask()">Add Task</button>
+  </div>
+  <div class="card"><h3>Recent Withdrawals</h3><div id="withdrawals"></div></div>
+  <div class="card"><h3>Users</h3><div id="users"></div></div>
+</div>
+<script>
+let pass="";
+async function api(url,opt={}) {
+ const r=await fetch(url,{...opt,headers:{"Content-Type":"application/json","X-Admin-Password":pass,...(opt.headers||{})}});
+ const d=await r.json(); if(!r.ok) throw new Error(d.error||"Failed"); return d;
+}
+async function login(){
+ pass=document.getElementById("pass").value;
+ try{await refresh();document.getElementById("panel").style.display="block"}catch(e){alert(e.message)}
+}
+async function refresh(){
+ const s=await api("/api/admin/stats");
+ document.getElementById("stats").textContent=`Users: ${s.users} | Pending withdrawals: ${s.pending} | Total balance: ৳${Number(s.balance).toFixed(2)}`;
+ const w=await api("/api/admin/withdrawals");
+ document.getElementById("withdrawals").innerHTML=w.map(x=>`<div class="card"><b>#${x.id}</b> ${x.telegram_id} — ৳${x.amount} — ${x.method} — ${x.account} — ${x.status} ${x.status==="pending"?`<button onclick="status(${x.id},'approved')">Approve</button> <button onclick="status(${x.id},'rejected')">Reject</button>`:""}</div>`).join("")||"None";
+ const u=await api("/api/admin/users");
+ document.getElementById("users").innerHTML=u.map(x=>`<div>${x.id}. ${x.first_name||""} @${x.username||"-"} | ৳${Number(x.balance).toFixed(2)} | refs ${x.referrals}</div>`).join("");
+}
+async function addTask(){
+ await api("/api/admin/task",{method:"POST",body:JSON.stringify({title:title.value,reward:reward.value,url:url.value})});
+ alert("Task added"); refresh();
+}
+async function status(id,s){
+ await api("/api/admin/withdrawal-status",{method:"POST",body:JSON.stringify({id,status:s})});
+ refresh();
+}
+</script></div></body></html>
